@@ -11,6 +11,6 @@ RGBColor Light::multiplier_for_point(Vec3 normal, Vec3 point) {
     return RGBColor(0, 0, 0);
 
   return RGBColor(intensity.red * dot / (distance * distance),
-                  intensity.blue * dot / (distance * distance),
-                  intensity.green * dot / (distance * distance));
+                  intensity.green * dot / (distance * distance),
+                  intensity.blue * dot / (distance * distance));
 }
