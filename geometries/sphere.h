@@ -1,8 +1,8 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "../ray.h"
-#include "../vec3.h"
+#include "../core/ray.h"
+#include "../core/vec3.h"
 
 class Sphere {
 private:

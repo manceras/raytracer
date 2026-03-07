@@ -1,6 +1,6 @@
 #include "sphere.h"
-#include "../ray.h"
-#include "../vec3.h"
+#include "../core/ray.h"
+#include "../core/vec3.h"
 #include <cmath>
 
 Sphere::Sphere(float r, const Vec3 c) : radius(r), center(c) {}

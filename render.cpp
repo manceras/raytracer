@@ -1,7 +1,7 @@
 #include "geometries/sphere.h"
-#include "light.h"
-#include "vec3.h"
-#include "viewport.h"
+#include "lights/light.h"
+#include "core/vec3.h"
+#include "core/viewport.h"
 #include <iostream>
 #include <string>
 
