@@ -2,7 +2,7 @@
 #include "../vec3.h"
 #include <cmath>
 
-class Spehere {
+class Sphere {
 private:
   float radius;
   Vec3 center;
