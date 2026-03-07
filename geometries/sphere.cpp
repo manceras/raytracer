@@ -22,3 +22,8 @@ float Sphere::collides(Ray &ray) {
     return t1;
   return -1;
 }
+
+Vec3 Sphere::normal_at_point(const Vec3 &point) {
+	Vec3 vector = point - center;
+	return vector.normalize();
+}
