@@ -12,9 +12,9 @@ public:
 
   Ray rayForPx(int column, int row) {
     float normalized_i = (float)column / width;
-    float normalized_j = (float)row / row;
+    float normalized_j = (float)row / height;
 
-    float aspect_ratio = (float)width / row;
+    float aspect_ratio = (float)width / height;
     float pixel_aspect = 0.5;
 
     float x = (2.0 * normalized_i - 1.0) * aspect_ratio * pixel_aspect;
