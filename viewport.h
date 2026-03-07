@@ -11,7 +11,7 @@ private:
 
 public:
 	Viewport(int width, int height);
-  Ray rayForPx(int column, int height);
+  Ray rayForPx(int column, int row);
 };
 
 #endif
