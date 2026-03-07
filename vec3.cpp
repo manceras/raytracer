@@ -3,11 +3,15 @@
 
 using namespace std;
 
-Vec3::Vec3(float x, float y, float z): x(x), y(y), z(z) {}
+Vec3::Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
 
-Vec3 Vec3::operator+(const Vec3 &v) { return Vec3(x + v.x, y + v.y, z + v.z); }
+Vec3 Vec3::operator+(const Vec3 &v) const {
+  return Vec3(x + v.x, y + v.y, z + v.z);
+}
 
-Vec3 Vec3::operator-(const Vec3 &v) { return Vec3(x - v.x, y - v.y, z - v.z); }
+Vec3 Vec3::operator-(const Vec3 &v) const {
+  return Vec3(x - v.x, y - v.y, z - v.z);
+}
 
 Vec3 Vec3::operator*(float n) const { return Vec3(x * n, y * n, z * n); }
 
