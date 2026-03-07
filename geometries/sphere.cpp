@@ -8,6 +8,8 @@ private:
   Vec3 center;
 
 public:
+	Sphere(float r, const Vec3 c): radius(r), center(c) {}
+
   float collides(Ray &ray) {
     float a = ray.direction * ray.direction;
     Vec3 l = ray.point - center;

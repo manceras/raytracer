@@ -7,5 +7,6 @@ private:
   Vec3 center;
 
 public:
+	Sphere(float r, const Vec3 c);
   float collides(Ray &ray);
 };
