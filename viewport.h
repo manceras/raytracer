@@ -1,3 +1,6 @@
+#ifndef VIEWPORT_H
+#define VIEWPORT_H
+
 #include "ray.h"
 #include "vec3.h"
 
@@ -10,3 +13,5 @@ public:
 	Viewport(int width, int height);
   Ray rayForPx(int i, int j);
 };
+
+#endif
