@@ -11,11 +11,13 @@ public:
 
   Vec3 operator-(const Vec3 &v);
 
-  Vec3 operator*(float n);
+  Vec3 operator*(float n) const;
 
   float operator*(const Vec3 &v);
 
   Vec3 normalize();
 };
+
+Vec3 operator*(float n, const Vec3 &v);
 
 #endif

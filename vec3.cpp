@@ -16,7 +16,7 @@ public:
 
   Vec3 operator-(const Vec3 &v) { return Vec3(x - v.x, y - v.y, z - v.z); }
 
-  Vec3 operator*(float n) { return Vec3(x * n, y * n, z * n); }
+  Vec3 operator*(float n) const { return Vec3(x * n, y * n, z * n); }
 
   float operator*(const Vec3 &v) { return x * v.x + y * v.y + z * v.z; }
 
@@ -25,3 +25,7 @@ public:
     return Vec3(x / mod, y / mod, z / mod);
   }
 };
+
+Vec3 operator*(float n, const Vec3 &v) {
+	return v * n;
+}
