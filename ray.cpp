@@ -1,11 +1,6 @@
-#include "vec3.h"
+#include "ray.h"
 
-class Ray {
-public:
-  Vec3 point, direction;
-
-  Ray(const Vec3 &point, const Vec3 &direction)
+Ray::Ray(const Vec3 &point, const Vec3 &direction)
       : point(point), direction(direction) {}
 
-  Vec3 at(float t) { return point + t * direction; }
-};
+Vec3 Ray::at(float t) { return point + t * direction; }
