@@ -10,15 +10,17 @@ using namespace std;
 int main() {
   int height = 22;
   int width = 80;
-  string characters = ".:-=+*#%@";
+  string characters = " .:-=+*#%@";
 
   Viewport viewport = Viewport(width, height);
 
   Sphere sphere = Sphere(1, Vec3(0, 0, 2));
 
-  Light light = Light(Vec3(0, 0, -3), 1);
+  Light light1 = Light(Vec3(0, 0, 0.1), 1);
+  Light light2 = Light(Vec3(0, 1, 0.1), 1);
 
-  string saved = "not saved";
+	const int lights_length = 2;
+	Light * lights[lights_length] = {&light1, &light2};
 
   for (int row = 0; row < height; row++) {
     for (int column = 0; column < width; column++) {
@@ -34,17 +36,13 @@ int main() {
       Vec3 impact_point = ray.at(distance);
 
       Vec3 normal = sphere.normal_at_point(impact_point);
-      float multiplier = light.multiplier_for_point(normal, impact_point);
 
-      if (row == 11 && column == 40) {
-        saved = "Multipler result is " + to_string(multiplier) + "\n";
-        saved += "Normal x: " + to_string(normal.x) + "\n";
-        saved += "Normal y: " + to_string(normal.y) + "\n";
-        saved += "Normal z: " + to_string(normal.z) + "\n";
-        saved += "impact x:" + to_string(impact_point.x) + "\n";
-        saved += "impact y:" + to_string(impact_point.y) + "\n";
-        saved += "impact z:" + to_string(impact_point.z) + "\n";
-      }
+			float multiplier = 0;
+
+			for (int i = 0; i < lights_length; i++) {
+				Light * light = lights[i];
+				multiplier += light->multiplier_for_point(normal, impact_point);
+			}
 
       int brightness = (int)(multiplier * characters.length());
 
@@ -56,8 +54,4 @@ int main() {
     }
     cout << endl;
   }
-
-  cout << endl;
-  cout << endl;
-  cout << "multiplier at 10 30 is " << saved << endl;
 }
