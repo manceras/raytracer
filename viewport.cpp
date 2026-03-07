@@ -10,9 +10,9 @@ public:
 
 	Viewport(int width, int height): width(width), height(height) {}
 
-  Ray rayForPx(int i, int j) {
-    float normalized_i = (float)i / width;
-    float normalized_j = (float)j / height;
+  Ray rayForPx(int column, int height) {
+    float normalized_i = (float)column / width;
+    float normalized_j = (float)height / height;
 
     float aspect_ratio = (float)width / height;
     float pixel_aspect = 0.5;
