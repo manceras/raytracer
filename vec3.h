@@ -16,6 +16,7 @@ public:
   float operator*(const Vec3 &v);
 
   Vec3 normalize();
+	float modulus();
 };
 
 Vec3 operator*(float n, const Vec3 &v);

@@ -18,8 +18,12 @@ Vec3 Vec3::operator*(float n) const { return Vec3(x * n, y * n, z * n); }
 float Vec3::operator*(const Vec3 &v) { return x * v.x + y * v.y + z * v.z; }
 
 Vec3 Vec3::normalize() {
-  float mod = sqrt(x * x + y * y + z * z);
+  float mod = modulus();
   return Vec3(x / mod, y / mod, z / mod);
+}
+
+float Vec3::modulus() {
+  return sqrt(x * x + y * y + z * z);
 }
 
 Vec3 operator*(float n, const Vec3 &v) { return v * n; }
