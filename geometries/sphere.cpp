@@ -19,8 +19,10 @@ public:
     float t1 = (-b + discriminant) / (2 * a);
     float t2 = (-b - discriminant) / (2 * a);
 
-		if (t1 > 0) return t1;
-		if (t2 > 0) return t2;
-		return -1;
+    if (t1 > 0)
+      return t1;
+    if (t2 > 0)
+      return t2;
+    return -1;
   }
 };
