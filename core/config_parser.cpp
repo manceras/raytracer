@@ -21,8 +21,8 @@ Vec3 parse_vec3(toml::node_view<toml::node> node, const string &name) {
 }
 
 RGBColor parse_rgb_color(toml::node_view<toml::node> node, const string &name) {
-	Vec3 vec = parse_vec3(node, name);
-	return RGBColor(vec.x, vec.y, vec.z);
+  Vec3 vec = parse_vec3(node, name);
+  return RGBColor(vec.x, vec.y, vec.z);
 }
 
 Config parse_config(string config_path) {
@@ -37,8 +37,10 @@ Config parse_config(string config_path) {
 
   Config config;
 
-  config.camera.position = parse_vec3(tbl["camera"]["position"], "camera.position");
-  config.camera.look_at = parse_vec3(tbl["camera"]["look_at"], "camera.look_at");
+  config.camera.position =
+      parse_vec3(tbl["camera"]["position"], "camera.position");
+  config.camera.look_at =
+      parse_vec3(tbl["camera"]["look_at"], "camera.look_at");
   config.camera.focal_length = tbl["camera"]["focal_length"].value_or(1.0f);
 
   config.render.width = tbl["render"]["width"].value_or(300);
@@ -46,6 +48,7 @@ Config parse_config(string config_path) {
   config.render.scale = tbl["render"]["scale"].value_or(1.0f);
 
   config.model.file_path = tbl["model"]["file"].value_or("model.obj"s);
+
 
   if (auto lights = tbl["lights"].as_array()) {
     for (auto &light : *lights) {

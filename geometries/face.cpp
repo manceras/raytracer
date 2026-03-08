@@ -1,17 +1,21 @@
-#include "triangle.h"
+#include "face.h"
 #include "../core/ray.h"
 #include "../core/vec3.h"
 #include "../core/vertex.h"
-#include "geometry.h"
 
-Triangle::Triangle(const Vertex &v1, const Vertex &v2, const Vertex &v3)
-    : v1(v1), v2(v2), v3(v3) {}
+Face::Face(const Vertex &v1, const Vertex &v2, const Vertex &v3,
+           const Material &material)
+    : v1(v1), v2(v2), v3(v3), material(material) {}
+
+Face::Face()
+    : v1(Vertex(Vec3(), Vec3())), v2(Vertex(Vec3(), Vec3())),
+      v3(Vertex(Vec3(), Vec3())), material({}) {}
 
 float determinant(const Vec3 &c1, const Vec3 &c2, const Vec3 &c3) {
   return c1 * (c2.cross(c3));
 }
 
-Hit Triangle::hit(const Ray &ray) const {
+Hit Face::hit(const Ray &ray) const {
   Vec3 minus_direction =
       Vec3(-ray.direction.x, -ray.direction.y, -ray.direction.z);
   Vec3 e1 = v2.position - v1.position;
@@ -33,10 +37,10 @@ Hit Triangle::hit(const Ray &ray) const {
   return {t, u, v};
 }
 
-Vec3 Triangle::normal_at(const Hit &hit) const {
-	float u = hit.u;
-	float v = hit.v;
-	float w = 1 - u - v;
+Vec3 Face::normal_at(const Hit &hit) const {
+  float u = hit.u;
+  float v = hit.v;
+  float w = 1 - u - v;
 
-	return u * v1.normal + v * v2.normal + w * v3.normal;
+  return u * v1.normal + v * v2.normal + w * v3.normal;
 }

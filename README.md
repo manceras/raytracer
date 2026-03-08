@@ -9,6 +9,8 @@ A raytracer built from scratch in C++ as a learning project. No graphics engine,
 - Ray-triangle intersection using the Möller-Trumbore algorithm
 - Lambertian (diffuse) shading with inverse square law falloff
 - Smooth shading via vertex normal interpolation
+- Reflections with configurable recursion depth
+- Per-face materials via MTL file parsing (Kd, Ks)
 - Colored point lights (as many as you want)
 - OBJ file loading (triangles and quads)
 - Configurable camera with position, look-at and focal length
@@ -51,22 +53,26 @@ Scenes are defined in TOML files:
 
 ```toml
 [camera]
-position = [0.5, 0.3, 2]
-look_at = [0, 0, 0]
+position = [1, 0.8, 2]
+look_at = [0, 0.3, 0]
 focal_length = 1
 
 [render]
 width = 800
-height = 800
+height = 600
 scale = 1
 
 [[lights]]
-position = [2, 1, 2]
-color = [1, 0.8, 0.6]
+position = [2, 2, 3]
+color = [20, 18, 15]
 
 [[lights]]
-position = [-2, 0, 1]
-color = [0.3, 0.4, 0.8]
+position = [-2, 2, 1]
+color = [6, 8, 16]
+
+[[lights]]
+position = [0, 3, -1]
+color = [8, 6, 12]
 
 [model]
 file = "./3d_files/Suzanne.obj"
