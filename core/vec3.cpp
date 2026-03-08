@@ -27,9 +27,9 @@ float Vec3::modulus() {
 }
 
 Vec3 Vec3::cross(const Vec3 &v) const {
-	float x = y * v.z - z * v.y;
-	float y = z * v.x - x * v.z;
-	float z = x * v.y - y * v.z;
+	float x = this->y * v.z - z * v.y;
+	float y = this->z * v.x - x * v.z;
+	float z = this->x * v.y - y * v.x;
 	return Vec3(x, y , z);
 }
 
