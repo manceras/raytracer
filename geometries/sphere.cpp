@@ -5,7 +5,7 @@
 
 Sphere::Sphere(float r, const Vec3 c) : radius(r), center(c) {}
 
-float Sphere::collides(Ray &ray) {
+float Sphere::collides(const Ray &ray) const {
   float a = ray.direction * ray.direction;
   Vec3 l = ray.point - center;
   float b = 2 * (ray.direction * l);
@@ -23,7 +23,7 @@ float Sphere::collides(Ray &ray) {
   return -1;
 }
 
-Vec3 Sphere::normal_at_point(const Vec3 &point) {
+Vec3 Sphere::normal_at_point(const Vec3 &point) const {
 	Vec3 vector = point - center;
 	return vector.normalize();
 }

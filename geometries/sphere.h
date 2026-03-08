@@ -12,8 +12,8 @@ private:
 
 public:
 	Sphere(float r, const Vec3 c);
-  float collides(Ray &ray);
-	Vec3 normal_at_point(const Vec3 &point);
+  float collides(const Ray &ray) const;
+	Vec3 normal_at_point(const Vec3 &point) const;
 };
 
 #endif

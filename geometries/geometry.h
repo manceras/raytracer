@@ -6,8 +6,8 @@
 
 class Geometry {
 	public:
-		virtual float collides(Ray &ray) = 0;
-		virtual Vec3 normal_at_point(const Vec3 &point) = 0;
+		virtual float collides(const Ray &ray) const = 0;
+		virtual Vec3 normal_at_point(const Vec3 &point) const = 0;
 };
 
 #endif
