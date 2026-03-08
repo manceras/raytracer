@@ -8,6 +8,7 @@ class RGBColor {
 		float blue;
 
 		RGBColor(float r, float g, float b);
+		RGBColor();
 		RGBColor operator+(const RGBColor &color) const;
 };
 
