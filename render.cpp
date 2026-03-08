@@ -10,6 +10,7 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
+#include <chrono>
 #include <thread>
 #include <vector>
 
@@ -85,6 +86,8 @@ int main(int argc, char *argv[]) {
 
   int rows_per_group = height / n_cores;
 
+  auto start = chrono::high_resolution_clock::now();
+
   for (int group = 0; group < n_cores; group++) {
     int last_row;
     if (group < n_cores - 1)
@@ -98,6 +101,10 @@ int main(int argc, char *argv[]) {
 
   for (thread &t : threads)
     t.join();
+
+  auto end = chrono::high_resolution_clock::now();
+  auto duration = chrono::duration_cast<chrono::milliseconds>(end - start);
+  printf("Render time: %ldms\n", duration.count());
 
   for (int i = 0; i < width * height; i++) {
     RGBColor px = pixels[i];
