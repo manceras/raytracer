@@ -26,4 +26,11 @@ float Vec3::modulus() {
   return sqrt(x * x + y * y + z * z);
 }
 
+Vec3 Vec3::cross(const Vec3 &v) const {
+	float x = y * v.z - z * v.y;
+	float y = z * v.x - x * v.z;
+	float z = x * v.y - y * v.z;
+	return Vec3(x, y , z);
+}
+
 Vec3 operator*(float n, const Vec3 &v) { return v * n; }
