@@ -6,6 +6,7 @@ public:
   float x, y, z;
 
   Vec3(float x, float y, float z);
+  Vec3();
   Vec3 operator+(const Vec3 &v) const;
   Vec3 operator-(const Vec3 &v) const;
   Vec3 operator*(float n) const;
