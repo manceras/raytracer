@@ -3,8 +3,9 @@
 
 #include "../core/ray.h"
 #include "../core/vec3.h"
+#include "geometry.h"
 
-class Sphere {
+class Sphere : public Geometry {
 private:
   float radius;
   Vec3 center;
