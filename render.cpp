@@ -4,7 +4,6 @@
 #include "core/trace.h"
 #include "core/vec3.h"
 #include "core/viewport.h"
-#include "geometries/geometry.h"
 #include "lights/light.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
@@ -38,7 +37,7 @@ int main(int argc, char *argv[]) {
     lights.push_back(Light(lc.position, lc.color));
   }
 
-  vector<Triangle> mesh = OBJParser(config.model.file_path).mesh;
+  vector<Face> mesh = OBJParser(config.model.file_path).mesh;
 
   SDL_Init(SDL_INIT_VIDEO);
   SDL_Window *window = SDL_CreateWindow(
@@ -52,8 +51,18 @@ int main(int argc, char *argv[]) {
     for (int column = 0; column < config.render.width; column++) {
       Ray ray = viewport.rayForPx(column, row);
 
-      RGBColor final_color =
+      RGBColor color =
           trace(ray, lights, mesh, config.model.color, 0.5, 5);
+
+			float final_r = color.red * 255;
+			float final_g = color.green * 255;
+			float final_b = color.blue * 255;
+
+			if (final_r > 255) final_r = 255;
+			if (final_g > 255) final_g = 255;
+			if (final_b > 255) final_b = 255;
+
+			RGBColor final_color(final_r, final_g, final_b);
 
       SDL_SetRenderDrawColor(renderer, final_color.red, final_color.green,
                              final_color.blue, 255);

@@ -22,6 +22,7 @@ private:
 public:
   Face(const Vertex &v1, const Vertex &v2, const Vertex &v3,
        const Material &material);
+  Face();
   Hit hit(const Ray &ray) const;
   Vec3 normal_at(const Hit &hit) const;
 	Material get_material() const {
