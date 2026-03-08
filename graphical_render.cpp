@@ -1,7 +1,9 @@
 #include "core/rgb_color.h"
 #include "core/vec3.h"
 #include "core/viewport.h"
+#include "geometries/geometry.h"
 #include "geometries/sphere.h"
+#include "geometries/triangle.h"
 #include "lights/light.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
@@ -18,7 +20,12 @@ int main() {
 
   Viewport viewport = Viewport(width, height);
 
-  Sphere sphere = Sphere(1, Vec3(0, 0, 2));
+  Sphere sphere = Sphere(0.3, Vec3(0.5, 0.5, 1));
+  Triangle triangle = Triangle(Vec3(-0.5, -0.5, 0.9), Vec3(-0.6, -0.5, 0.8),
+                               Vec3(-0.7, -0.5, 1));
+
+  const int geometries_length = 2;
+  Geometry *geometries[geometries_length] = {&sphere, &triangle};
 
   Light light1 = Light(Vec3(0, 0, 0.1), RGBColor(1, 0, 0));
   Light light2 = Light(Vec3(0, 1, 0.1), RGBColor(0, 1, 0));
@@ -30,22 +37,32 @@ int main() {
   SDL_Window *window =
       SDL_CreateWindow("Raytracer", SDL_WINDOWPOS_CENTERED,
                        SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
-  SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
+  SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
 
   for (int row = 0; row < height; row++) {
     for (int column = 0; column < width; column++) {
 
       Ray ray = viewport.rayForPx(column, row);
-      float distance = sphere.collides(ray);
+      float distance = -1;
+
+      Vec3 normal(0, 0, 0);
+
+      for (int i = 0; i < geometries_length; i++) {
+        Geometry *geometry = geometries[i];
+        float new_distance = geometry->collides(ray);
+        if (new_distance > 0 && (distance == -1 || new_distance < distance)) {
+          distance = new_distance;
+          normal = geometry->normal_at_point(ray.at(distance));
+        }
+      }
 
       if (distance < 0) {
-				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-				SDL_RenderDrawPoint(renderer, column, row);
-				continue;
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderDrawPoint(renderer, column, row);
+        continue;
       }
 
       Vec3 impact_point = ray.at(distance);
-      Vec3 normal = sphere.normal_at_point(impact_point);
       RGBColor multiplier = RGBColor(0, 0, 0);
       for (int i = 0; i < lights_length; i++) {
         Light *light = lights[i];
@@ -75,25 +92,25 @@ int main() {
       if (b > 255)
         b = 255;
 
-			SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-			SDL_RenderDrawPoint(renderer, column, row);
+      SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+      SDL_RenderDrawPoint(renderer, column, row);
     }
   }
 
-	SDL_RenderPresent(renderer);
+  SDL_RenderPresent(renderer);
 
-	bool running = true;
-	SDL_Event event;
+  bool running = true;
+  SDL_Event event;
 
-	while (running) {
-		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT) {
-				running = false;
-			}
-		}
-	}
+  while (running) {
+    while (SDL_PollEvent(&event)) {
+      if (event.type == SDL_QUIT) {
+        running = false;
+      }
+    }
+  }
 
-	SDL_DestroyRenderer(renderer);
+  SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   SDL_Quit();
 }
