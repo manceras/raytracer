@@ -1,0 +1,20 @@
+[camera]
+position = [0, 0, 2]
+look_at = [0, 0, 0]
+focal_length = 1
+
+[render]
+width = 300
+height = 300
+scale = 3
+
+[[lights]]
+position = [0, 0, 0.1]
+color = [1, 0, 0]
+
+[[lights]]
+position = [0, 1, 1]
+color = [0, 1, 0]
+
+[model]
+file = "./3d_files/Suzane.obj"
