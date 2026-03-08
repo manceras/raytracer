@@ -17,7 +17,7 @@ Ray Viewport::rayForPx(int column, int row) {
 
   Vec3 forward = direction;
   Vec3 right = direction.cross(Vec3(0, 1, 0));
-  Vec3 up = forward.cross(right);
+  Vec3 up = right.cross(forward);
 
   float x = (2.0 * normalized_i - 1.0) * aspect_ratio * pixel_aspect;
   float y = 1.0 - 2.0 * normalized_j;
