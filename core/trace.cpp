@@ -1,30 +1,20 @@
 #include "trace.h"
-#include "obj_parser.h"
+#include "bvh_node.h"
 #include "ray.h"
 #include "rgb_color.h"
 #include "vec3.h"
 
-RGBColor trace(Ray ray, vector<Light> lights, OBJParser object, int depth) {
-  float distance = -1;
-  Vec3 normal(0, 0, 0);
-  Vec3 hit_point;
-  Face hit_face;
+RGBColor trace(Ray ray, vector<Light> lights, const BVHNode &bvh, int depth) {
 
-  for (const Face &face : object.mesh) {
-    Hit hit = face.hit(ray);
-    if (hit.t > 0 && (distance == -1 || hit.t < distance)) {
-      Vec3 new_normal = face.normal_at(hit);
-      if (new_normal * ray.direction > 0)
-        new_normal = new_normal * -1;
-      distance = hit.t;
-      normal = new_normal;
-      hit_point = ray.at(hit.t);
-      hit_face = face;
-    }
-  }
+	optional<HitFace> hit_face_opt = bvh.hit_face(ray);
 
-  if (distance < 0)
+  if (!hit_face_opt)
     return RGBColor(0, 0, 0);
+
+	HitFace hit_face = hit_face_opt.value();
+	float distance = hit_face.hit.t;
+	Vec3 normal = hit_face.face.normal_at(hit_face.hit);
+	Vec3 hit_point = ray.at(distance);
 
   Vec3 impact_point = ray.at(distance);
   RGBColor multiplier = RGBColor(0, 0, 0);
@@ -41,7 +31,7 @@ RGBColor trace(Ray ray, vector<Light> lights, OBJParser object, int depth) {
   Vec3 reflected_direction =
       ray.direction - 2 * (ray.direction * normal) * normal;
   Ray reflected_ray = Ray(hit_point + normal * 0.001, reflected_direction);
-  return hit_face.get_material().kd * difuse_color +
-         hit_face.get_material().ks *
-             trace(reflected_ray, lights, object, depth - 1);
+  return hit_face.face.get_material().kd * difuse_color +
+         hit_face.face.get_material().ks *
+             trace(reflected_ray, lights, bvh, depth - 1);
 }

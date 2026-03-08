@@ -3,6 +3,7 @@
 #include <algorithm>
 
 AABB::AABB(Vec3 min, Vec3 max): min(min), max(max) {}
+AABB::AABB(): min(Vec3(0, 0, 0)), max(Vec3(0, 0, 0)) {}
 
 bool AABB::hit(const Ray &ray) const {
 	float min_tx = (min.x - ray.point.x) / ray.direction.x;

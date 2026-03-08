@@ -1,3 +1,4 @@
+#include "core/bvh_node.h"
 #include "core/config_parser.h"
 #include "core/obj_parser.h"
 #include "core/rgb_color.h"
@@ -47,12 +48,14 @@ int main(int argc, char *argv[]) {
   SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
   SDL_RenderSetLogicalSize(renderer, config.render.width, config.render.height);
 
+	BVHNode bvh = BVHNode(object.mesh);
+
   for (int row = 0; row < config.render.height; row++) {
     for (int column = 0; column < config.render.width; column++) {
       Ray ray = viewport.rayForPx(column, row);
 
       RGBColor color =
-          trace(ray, lights, object, 5);
+          trace(ray, lights, bvh, 5);
 
 			float final_r = color.red * 255;
 			float final_g = color.green * 255;

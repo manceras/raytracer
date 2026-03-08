@@ -11,6 +11,7 @@ private:
 
 public:
 	AABB(const Vec3 min, const Vec3 max);
+	AABB();
 	bool hit(const Ray &ray) const;
 };
 
