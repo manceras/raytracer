@@ -3,12 +3,11 @@
 #include "rgb_color.h"
 #include "vec3.h"
 
-RGBColor trace(Ray ray, vector<Light> lights, vector<Face> mesh,
-               RGBColor color, float reflectance, int depth) {
+RGBColor trace(Ray ray, vector<Light> lights, vector<Face> mesh, int depth) {
   float distance = -1;
   Vec3 normal(0, 0, 0);
   Vec3 hit_point;
-	Face hit_face;
+  Face hit_face;
   for (const Face &face : mesh) {
     Hit hit = face.hit(ray);
     if (hit.t > 0 && (distance == -1 || hit.t < distance)) {
@@ -18,7 +17,7 @@ RGBColor trace(Ray ray, vector<Light> lights, vector<Face> mesh,
       distance = hit.t;
       normal = new_normal;
       hit_point = ray.at(hit.t);
-			hit_face = face;
+      hit_face = face;
     }
   }
 
@@ -32,7 +31,7 @@ RGBColor trace(Ray ray, vector<Light> lights, vector<Face> mesh,
   }
 
   RGBColor difuse_color =
-      RGBColor(multiplier.red, multiplier.green, multiplier.blue) * color;
+      RGBColor(multiplier.red, multiplier.green, multiplier.blue);
 
   if (depth <= 0)
     return difuse_color;
@@ -41,5 +40,6 @@ RGBColor trace(Ray ray, vector<Light> lights, vector<Face> mesh,
       ray.direction - 2 * (ray.direction * normal) * normal;
   Ray reflected_ray = Ray(hit_point + normal * 0.001, reflected_direction);
   return hit_face.get_material().kd * difuse_color +
-         hit_face.get_material().ks * trace(reflected_ray, lights, mesh, color, reflectance, depth - 1);
+         hit_face.get_material().ks *
+             trace(reflected_ray, lights, mesh, depth - 1);
 }

@@ -8,7 +8,6 @@
 
 using namespace std;
 
-RGBColor trace(Ray ray, vector<Light> lights, vector<Face> mesh,
-               RGBColor color, float reflectancy, int depth);
+RGBColor trace(Ray ray, vector<Light> lights, vector<Face> mesh, int depth);
 
 #endif

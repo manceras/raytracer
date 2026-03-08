@@ -49,12 +49,6 @@ Config parse_config(string config_path) {
 
   config.model.file_path = tbl["model"]["file"].value_or("model.obj"s);
 
-  auto color_node = tbl["model"]["color"];
-  if (color_node.is_array()) {
-    config.model.color = parse_rgb_color(color_node, "model.color");
-  } else {
-    config.model.color = RGBColor(1, 1, 1);
-  }
 
   if (auto lights = tbl["lights"].as_array()) {
     for (auto &light : *lights) {

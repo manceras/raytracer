@@ -1,25 +1,24 @@
 [camera]
-position = [0.5, 0.3, 2]
-look_at = [0, 0, 0]
+position = [1, 0.8, 2]
+look_at = [0, 0.3, 0]
 focal_length = 1
 
 [render]
-width = 400
-height = 400
-scale = 1.5
+width = 800
+height = 600
+scale = 1
 
 [[lights]]
-position = [2, 1, 2]
-color = [4, 3.2, 2.4]
+position = [2, 2, 3]
+color = [20, 18, 15]
 
 [[lights]]
-position = [-2, 0, 1]
-color = [1.2, 1.6, 3.2]
+position = [-2, 2, 1]
+color = [6, 8, 16]
 
 [[lights]]
-position = [-1, 1, -2]
-color = [2, 0.8, 2.8]
+position = [0, 3, -1]
+color = [8, 6, 12]
 
 [model]
-file = "./3d_files/SuzanneCubed.obj"
-color = [1, 0.2, 0.3]
+file = "./3d_files/SuzanneCubedPink.obj"

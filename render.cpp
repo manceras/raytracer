@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
       Ray ray = viewport.rayForPx(column, row);
 
       RGBColor color =
-          trace(ray, lights, mesh, config.model.color, 0.5, 5);
+          trace(ray, lights, mesh, 5);
 
 			float final_r = color.red * 255;
 			float final_g = color.green * 255;
