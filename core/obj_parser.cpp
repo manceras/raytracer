@@ -19,7 +19,7 @@ VertexValues vertexValues(string group) {
   return {normal, vertex, texture};
 }
 
-OBJParser::OBJParser(string file_path, const Vec3 offset) {
+OBJParser::OBJParser(string file_path) {
   ifstream file(file_path);
   string line;
 
@@ -34,7 +34,7 @@ OBJParser::OBJParser(string file_path, const Vec3 offset) {
     if (prefix == "v") {
       float x, y, z;
       stream >> x >> y >> z;
-      vertices.push_back(Vec3(x * 0.2, y * 0.2, z * 0.2) + offset);
+      vertices.push_back(Vec3(x, y, z));
     }
 
     if (prefix == "vn") {
@@ -63,7 +63,8 @@ OBJParser::OBJParser(string file_path, const Vec3 offset) {
         VertexValues v4_values = vertexValues(v4_group);
         Vec3 v4 = vertices.at(v4_values.vertex - 1);
         Vec3 n4 = normals.at(v4_values.normal - 1);
-				mesh.push_back(Triangle(Vertex(v1, n1), Vertex(v3, n3), Vertex(v4, n4)));
+        mesh.push_back(
+            Triangle(Vertex(v1, n1), Vertex(v3, n3), Vertex(v4, n4)));
       }
 
       mesh.push_back(Triangle(Vertex(v1, n1), Vertex(v2, n2), Vertex(v3, n3)));
