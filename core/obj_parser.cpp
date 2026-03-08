@@ -44,8 +44,8 @@ OBJParser::OBJParser(string file_path, const Vec3 offset) {
     }
 
     if (prefix == "f") {
-      string v1_group, v2_group, v3_group;
-      stream >> v1_group >> v2_group >> v3_group;
+      string v1_group, v2_group, v3_group, v4_group;
+      stream >> v1_group >> v2_group >> v3_group >> v4_group;
 
       VertexValues v1_values = vertexValues(v1_group);
       VertexValues v2_values = vertexValues(v2_group);
@@ -58,6 +58,13 @@ OBJParser::OBJParser(string file_path, const Vec3 offset) {
       Vec3 n1 = normals.at(v1_values.normal - 1);
       Vec3 n2 = normals.at(v2_values.normal - 1);
       Vec3 n3 = normals.at(v3_values.normal - 1);
+
+      if (!v4_group.empty()) {
+        VertexValues v4_values = vertexValues(v4_group);
+        Vec3 v4 = vertices.at(v4_values.vertex - 1);
+        Vec3 n4 = normals.at(v4_values.normal - 1);
+				mesh.push_back(Triangle(Vertex(v1, n1), Vertex(v3, n3), Vertex(v4, n4)));
+      }
 
       mesh.push_back(Triangle(Vertex(v1, n1), Vertex(v2, n2), Vertex(v3, n3)));
     }
