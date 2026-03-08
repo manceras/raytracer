@@ -4,9 +4,9 @@ look_at = [0, 0, 0]
 focal_length = 1
 
 [render]
-width = 800
-height = 800
-scale = 1
+width = 400
+height = 400
+scale = 1.5
 
 [[lights]]
 position = [2, 1, 2]
@@ -21,4 +21,5 @@ position = [-1, 1, -2]
 color = [2, 0.8, 2.8]
 
 [model]
-file = "./3d_files/Suzanne.obj"
+file = "./3d_files/SuzanneCubed.obj"
+color = [1, 0.2, 0.3]

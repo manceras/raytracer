@@ -10,6 +10,10 @@ class RGBColor {
 		RGBColor(float r, float g, float b);
 		RGBColor();
 		RGBColor operator+(const RGBColor &color) const;
+		RGBColor operator*(const RGBColor &color) const;
+		RGBColor operator*(float n) const;
 };
+
+RGBColor operator*(float n, const RGBColor &c);
 
 #endif

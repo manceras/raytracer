@@ -27,6 +27,7 @@ struct LightConfig {
 
 struct Model {
 	string file_path;
+	RGBColor color;
 };
 
 struct Config {
