@@ -27,9 +27,9 @@ Vec3 Vec3::normalize() const {
 float Vec3::modulus() const { return sqrt(x * x + y * y + z * z); }
 
 Vec3 Vec3::cross(const Vec3 &v) const {
-  float x = this->y * v.z - z * v.y;
-  float y = this->z * v.x - x * v.z;
-  float z = this->x * v.y - y * v.x;
+  float x = this->y * v.z - this->z * v.y;
+  float y = this->z * v.x - this->x * v.z;
+  float z = this->x * v.y - this->y * v.x;
   return Vec3(x, y, z);
 }
 

@@ -12,7 +12,7 @@ using namespace std;
 class OBJParser {
 public:
 	vector<Triangle> mesh;
-	OBJParser(string file_path);
+	OBJParser(string file_path, const Vec3 offset = Vec3(0, 0, 0));
 };
 
 #endif

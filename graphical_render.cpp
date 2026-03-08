@@ -1,34 +1,29 @@
+#include "core/obj_parser.h"
 #include "core/rgb_color.h"
 #include "core/vec3.h"
 #include "core/viewport.h"
 #include "geometries/geometry.h"
-#include "geometries/sphere.h"
-#include "geometries/triangle.h"
 #include "lights/light.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
-#include <string>
+#include <vector>
 
 using namespace std;
 
 int main() {
-  int height = 1000;
-  int width = 1000;
-  string characters = " .:-=+*#%@";
+  int height = 300;
+  int width = 300;
 
   Viewport viewport = Viewport(width, height);
 
-  Sphere sphere = Sphere(0.3, Vec3(0.5, 0.5, 1));
-  Triangle triangle = Triangle(Vec3(-0.5, -0.5, 0.9), Vec3(-0.6, -0.5, 0.8),
-                               Vec3(-0.7, -0.5, 1));
-
-  const int geometries_length = 2;
-  Geometry *geometries[geometries_length] = {&sphere, &triangle};
+	Vec3 offset = Vec3(0, 0, 0.5);
 
   Light light1 = Light(Vec3(0, 0, 0.1), RGBColor(1, 0, 0));
   Light light2 = Light(Vec3(0, 1, 0.1), RGBColor(0, 1, 0));
+
+	vector mesh = OBJParser("./3d_files/Suzane.obj", offset).mesh;
 
   const int lights_length = 2;
   Light *lights[lights_length] = {&light1, &light2};
@@ -36,8 +31,9 @@ int main() {
   SDL_Init(SDL_INIT_VIDEO);
   SDL_Window *window =
       SDL_CreateWindow("Raytracer", SDL_WINDOWPOS_CENTERED,
-                       SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
+                       SDL_WINDOWPOS_CENTERED, 1000, 1000, SDL_WINDOW_SHOWN);
   SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
+	SDL_RenderSetLogicalSize(renderer, width, height);
 
   for (int row = 0; row < height; row++) {
     for (int column = 0; column < width; column++) {
@@ -47,12 +43,12 @@ int main() {
 
       Vec3 normal(0, 0, 0);
 
-      for (int i = 0; i < geometries_length; i++) {
-        Geometry *geometry = geometries[i];
-        float new_distance = geometry->collides(ray);
+      for (const Geometry &geometry : mesh) {
+        float new_distance = geometry.collides(ray);
         if (new_distance > 0 && (distance == -1 || new_distance < distance)) {
+					if (normal * ray.direction > 0) continue;
           distance = new_distance;
-          normal = geometry->normal_at_point(ray.at(distance));
+          normal = geometry.normal_at_point(ray.at(distance));
         }
       }
 
@@ -75,7 +71,7 @@ int main() {
       float b_brightness = multiplier.blue;
 
       int brightness =
-          (r_brightness + b_brightness + g_brightness) * characters.length();
+          (r_brightness + b_brightness + g_brightness) * 10;
 
       if (brightness >= 10 || brightness < 0) {
         brightness = 9;
