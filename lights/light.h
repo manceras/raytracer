@@ -11,7 +11,7 @@ private:
 
 public:
 	Light(Vec3 position, RGBColor intensity);
-	RGBColor multiplier_for_point(Vec3 normal, Vec3 point);
+	RGBColor multiplier_for_point(const Vec3 normal, const Vec3 point) const;
 };
 
 #endif
