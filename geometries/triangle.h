@@ -1,5 +1,5 @@
-#ifndef SPHERE_H
-#define SPHERE_H
+#ifndef TRIANGLE_H
+#define TRIANGLE_H
 
 #include "../core/ray.h"
 #include "../core/vec3.h"
