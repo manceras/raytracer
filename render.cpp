@@ -16,24 +16,25 @@ int main() {
   int height = 300;
   int width = 300;
 
-  Viewport viewport = Viewport(width, height);
+  Viewport viewport = Viewport(width, height, Vec3(0, -2, 1), 1, Vec3(0, 0, 0));
 
-	Vec3 offset = Vec3(0, 0, 0.5);
+  Vec3 offset = Vec3(0, 0, 0.5);
 
   Light light1 = Light(Vec3(0, 0, 0.1), RGBColor(1, 0, 0));
-  Light light2 = Light(Vec3(0, 1, 0.1), RGBColor(0, 1, 0));
+  Light light2 = Light(Vec3(0, 1, 1), RGBColor(0, 1, 0));
+  Light light3 = Light(Vec3(0, -2, 0), RGBColor(0, 0, 1));
 
-	vector mesh = OBJParser("./3d_files/Suzane.obj", offset).mesh;
+  vector mesh = OBJParser("./3d_files/Suzane.obj").mesh;
 
-  const int lights_length = 2;
-  Light *lights[lights_length] = {&light1, &light2};
+  const int lights_length = 3;
+  Light *lights[lights_length] = {&light1, &light2, &light3};
 
   SDL_Init(SDL_INIT_VIDEO);
   SDL_Window *window =
       SDL_CreateWindow("Raytracer", SDL_WINDOWPOS_CENTERED,
                        SDL_WINDOWPOS_CENTERED, 1000, 1000, SDL_WINDOW_SHOWN);
   SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
-	SDL_RenderSetLogicalSize(renderer, width, height);
+  SDL_RenderSetLogicalSize(renderer, width, height);
 
   for (int row = 0; row < height; row++) {
     for (int column = 0; column < width; column++) {
@@ -47,9 +48,10 @@ int main() {
         Hit hit = geometry.hit(ray);
         if (hit.t > 0 && (distance == -1 || hit.t < distance)) {
           Vec3 new_normal = geometry.normal_at(hit);
-					if (new_normal * ray.direction > 0) new_normal = new_normal * -1;
+          if (new_normal * ray.direction > 0)
+            new_normal = new_normal * -1;
           distance = hit.t;
-					normal = new_normal;
+          normal = new_normal;
         }
       }
 
@@ -71,8 +73,7 @@ int main() {
       float g_brightness = multiplier.green;
       float b_brightness = multiplier.blue;
 
-      int brightness =
-          (r_brightness + b_brightness + g_brightness) * 10;
+      int brightness = (r_brightness + b_brightness + g_brightness) * 10;
 
       if (brightness >= 10 || brightness < 0) {
         brightness = 9;
