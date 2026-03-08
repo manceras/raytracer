@@ -1,3 +1,4 @@
+#include "core/config_parser.h"
 #include "core/obj_parser.h"
 #include "core/rgb_color.h"
 #include "core/vec3.h"
@@ -12,32 +13,42 @@
 
 using namespace std;
 
-int main() {
-  int height = 300;
-  int width = 300;
+int main(int argc, char *argv[]) {
 
-  Viewport viewport = Viewport(width, height, Vec3(0, -2, 1), 1, Vec3(0, 0, 0));
+  // search for -c argument
+  bool is_config_next = false;
+  string config_path;
+  for (int i = 0; i < argc; i++) {
+    string arg = argv[i];
+    if (is_config_next)
+      config_path = arg;
+    if (arg == "-c")
+      is_config_next = true;
+  }
 
-  Vec3 offset = Vec3(0, 0, 0.5);
+  Config config = parse_config(config_path);
 
-  Light light1 = Light(Vec3(0, 0, 0.1), RGBColor(1, 0, 0));
-  Light light2 = Light(Vec3(0, 1, 1), RGBColor(0, 1, 0));
-  Light light3 = Light(Vec3(0, -2, 0), RGBColor(0, 0, 1));
+  Viewport viewport = Viewport(
+      config.render.width, config.render.height, config.camera.position,
+      config.camera.focal_length, config.camera.look_at);
 
-  vector mesh = OBJParser("./3d_files/Suzane.obj").mesh;
+  vector<Light> lights;
+  for (const LightConfig lc : config.lights) {
+    lights.push_back(Light(lc.position, lc.color));
+  }
 
-  const int lights_length = 3;
-  Light *lights[lights_length] = {&light1, &light2, &light3};
+  vector<Triangle> mesh = OBJParser(config.model.file_path).mesh;
 
   SDL_Init(SDL_INIT_VIDEO);
-  SDL_Window *window =
-      SDL_CreateWindow("Raytracer", SDL_WINDOWPOS_CENTERED,
-                       SDL_WINDOWPOS_CENTERED, 1000, 1000, SDL_WINDOW_SHOWN);
+  SDL_Window *window = SDL_CreateWindow(
+      "Raytracer", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+      config.render.width * config.render.scale,
+      config.render.height * config.render.scale, SDL_WINDOW_SHOWN);
   SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
-  SDL_RenderSetLogicalSize(renderer, width, height);
+  SDL_RenderSetLogicalSize(renderer, config.render.width, config.render.height);
 
-  for (int row = 0; row < height; row++) {
-    for (int column = 0; column < width; column++) {
+  for (int row = 0; row < config.render.height; row++) {
+    for (int column = 0; column < config.render.width; column++) {
 
       Ray ray = viewport.rayForPx(column, row);
       float distance = -1;
@@ -63,10 +74,9 @@ int main() {
 
       Vec3 impact_point = ray.at(distance);
       RGBColor multiplier = RGBColor(0, 0, 0);
-      for (int i = 0; i < lights_length; i++) {
-        Light *light = lights[i];
+      for (const Light light : lights) {
         multiplier =
-            multiplier + light->multiplier_for_point(normal, impact_point);
+            multiplier + light.multiplier_for_point(normal, impact_point);
       }
 
       float r_brightness = multiplier.red;
