@@ -7,6 +7,10 @@ RGBColor RGBColor::operator+(const RGBColor &color) const {
   return RGBColor(color.red + red, color.green + green, color.blue + blue);
 }
 
+RGBColor RGBColor::operator-(const RGBColor &color) const {
+  return RGBColor(color.red - red, color.green - green, color.blue - blue);
+}
+
 RGBColor RGBColor::operator*(const RGBColor &color) const {
   return RGBColor(color.red * red, color.green * green, color.blue * blue);
 }
