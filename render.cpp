@@ -10,13 +10,39 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
+#include <thread>
 #include <vector>
 
 using namespace std;
 
+void render(int initial_row, int final_row, int width, RGBColor *pixels,
+            const Viewport &viewport, const vector<Light> &lights,
+            const BVHNode &bvh) {
+  for (int row = initial_row; row < final_row; row++) {
+    for (int column = 0; column < width; column++) {
+      Ray ray = viewport.rayForPx(column, row);
+
+      RGBColor color = trace(ray, lights, bvh, 5);
+
+      float final_r = color.red * 255;
+      float final_g = color.green * 255;
+      float final_b = color.blue * 255;
+
+      if (final_r > 255)
+        final_r = 255;
+      if (final_g > 255)
+        final_g = 255;
+      if (final_b > 255)
+        final_b = 255;
+
+      RGBColor final_color(final_r, final_g, final_b);
+      pixels[row * width + column] = final_color;
+    }
+  }
+}
+
 int main(int argc, char *argv[]) {
 
-  // search for -c argument
   bool is_config_next = false;
   string config_path;
   for (int i = 0; i < argc; i++) {
@@ -48,29 +74,38 @@ int main(int argc, char *argv[]) {
   SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
   SDL_RenderSetLogicalSize(renderer, config.render.width, config.render.height);
 
-	BVHNode bvh = BVHNode(object.mesh);
+  BVHNode bvh = BVHNode(object.mesh);
 
-  for (int row = 0; row < config.render.height; row++) {
-    for (int column = 0; column < config.render.width; column++) {
-      Ray ray = viewport.rayForPx(column, row);
+  const int height = config.render.height;
+  const int width = config.render.width;
+  RGBColor *pixels = new RGBColor[height * width];
 
-      RGBColor color =
-          trace(ray, lights, bvh, 5);
+  const int n_cores = std::thread::hardware_concurrency();
+  vector<thread> threads;
 
-			float final_r = color.red * 255;
-			float final_g = color.green * 255;
-			float final_b = color.blue * 255;
+  int rows_per_group = height / n_cores;
 
-			if (final_r > 255) final_r = 255;
-			if (final_g > 255) final_g = 255;
-			if (final_b > 255) final_b = 255;
+  for (int group = 0; group < n_cores; group++) {
+    int last_row;
+    if (group < n_cores - 1)
+      last_row = (group + 1) * rows_per_group;
+    else
+      last_row = height;
+		threads.emplace_back(
+          render, group * rows_per_group, last_row, width, pixels,
+          std::ref(viewport), std::ref(lights), std::ref(bvh));
+  }
 
-			RGBColor final_color(final_r, final_g, final_b);
+  for (thread &t : threads)
+    t.join();
 
-      SDL_SetRenderDrawColor(renderer, final_color.red, final_color.green,
-                             final_color.blue, 255);
-      SDL_RenderDrawPoint(renderer, column, row);
-    }
+  for (int i = 0; i < width * height; i++) {
+    RGBColor px = pixels[i];
+    int row = (int)i / width;
+    int column = i % width;
+
+    SDL_SetRenderDrawColor(renderer, px.red, px.green, px.blue, 255);
+    SDL_RenderDrawPoint(renderer, column, row);
   }
 
   SDL_RenderPresent(renderer);
@@ -86,6 +121,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  delete[] pixels;
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   SDL_Quit();

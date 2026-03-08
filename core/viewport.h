@@ -17,7 +17,7 @@ private:
 public:
   Viewport(int width, int height, Vec3 origin, float focal_length,
            Vec3 look_at);
-  Ray rayForPx(int column, int row);
+  Ray rayForPx(int column, int row) const;
 };
 
 #endif

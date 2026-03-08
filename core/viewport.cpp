@@ -8,7 +8,7 @@ Viewport::Viewport(int width, int height, Vec3 origin, float focal_length,
       direction((look_at - origin).normalize()),
       right(direction.cross(Vec3(0, 1, 0))), up(direction.cross(right)) {}
 
-Ray Viewport::rayForPx(int column, int row) {
+Ray Viewport::rayForPx(int column, int row) const {
   float normalized_i = (float)column / width;
   float normalized_j = (float)row / height;
 
