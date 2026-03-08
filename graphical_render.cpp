@@ -44,11 +44,12 @@ int main() {
       Vec3 normal(0, 0, 0);
 
       for (const Geometry &geometry : mesh) {
-        float new_distance = geometry.collides(ray);
-        if (new_distance > 0 && (distance == -1 || new_distance < distance)) {
-					if (normal * ray.direction > 0) continue;
-          distance = new_distance;
-          normal = geometry.normal_at_point(ray.at(distance));
+        Hit hit = geometry.hit(ray);
+        if (hit.t > 0 && (distance == -1 || hit.t < distance)) {
+          Vec3 new_normal = geometry.normal_at(hit);
+					if (new_normal * ray.direction > 0) new_normal = new_normal * -1;
+          distance = hit.t;
+					normal = new_normal;
         }
       }
 
