@@ -17,4 +17,4 @@ position = [0, 1, 1]
 color = [0, 1, 0]
 
 [model]
-file = "./3d_files/Suzane.obj"
+file = "./3d_files/Suzanne.obj"
