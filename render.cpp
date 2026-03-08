@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     lights.push_back(Light(lc.position, lc.color));
   }
 
-  vector<Face> mesh = OBJParser(config.model.file_path).mesh;
+  OBJParser object = OBJParser(config.model.file_path);
 
   SDL_Init(SDL_INIT_VIDEO);
   SDL_Window *window = SDL_CreateWindow(
@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
       Ray ray = viewport.rayForPx(column, row);
 
       RGBColor color =
-          trace(ray, lights, mesh, 5);
+          trace(ray, lights, object, 5);
 
 			float final_r = color.red * 255;
 			float final_g = color.green * 255;

@@ -1,6 +1,7 @@
 #include "obj_parser.h"
 #include "vec3.h"
 #include <algorithm>
+#include <cmath>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -28,6 +29,13 @@ OBJParser::OBJParser(string file_path) {
   vector<Material> materials;
   Material current_material;
 
+  float max_x = -INFINITY;
+  float min_x = INFINITY;
+  float max_y = -INFINITY;
+  float min_y = INFINITY;
+  float max_z = -INFINITY;
+  float min_z = INFINITY;
+
   while (getline(file, line)) {
     istringstream stream(line);
     string prefix;
@@ -53,6 +61,18 @@ OBJParser::OBJParser(string file_path) {
       float x, y, z;
       stream >> x >> y >> z;
       vertices.push_back(Vec3(x, y, z));
+      if (x > max_x)
+        max_x = x;
+      if (x < min_x)
+        min_x = x;
+      if (y > max_y)
+        max_y = y;
+      if (y < min_y)
+        min_y = y;
+      if (z > max_z)
+        max_z = z;
+      if (z < min_z)
+        min_z = z;
     }
 
     if (prefix == "vn") {
@@ -89,6 +109,8 @@ OBJParser::OBJParser(string file_path) {
                           current_material));
     }
   }
+  max_vertex = Vec3(max_x, max_y, max_z);
+  min_vertex = Vec3(min_x, min_y, min_z);
 }
 
 vector<Material> OBJParser::parse_mtl(string file_path) {
@@ -126,4 +148,12 @@ vector<Material> OBJParser::parse_mtl(string file_path) {
 
   materials.push_back(current_mtl);
   return materials;
+}
+
+Vec3 OBJParser::get_max_vertex() const {
+	return max_vertex;
+}
+
+Vec3 OBJParser::get_min_vertex() const {
+	return min_vertex;
 }

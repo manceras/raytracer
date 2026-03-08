@@ -12,10 +12,16 @@
 using namespace std;
 
 class OBJParser {
+private:
+	Vec3 max_vertex;
+	Vec3 min_vertex;
 public:
   vector<Face> mesh;
-  OBJParser(string file_path);
 	vector<Material> parse_mtl(string file_path);
+
+  OBJParser(string file_path);
+	Vec3 get_max_vertex() const;
+	Vec3 get_min_vertex() const;
 };
 
 #endif

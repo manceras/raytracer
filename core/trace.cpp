@@ -1,14 +1,16 @@
 #include "trace.h"
+#include "obj_parser.h"
 #include "ray.h"
 #include "rgb_color.h"
 #include "vec3.h"
 
-RGBColor trace(Ray ray, vector<Light> lights, vector<Face> mesh, int depth) {
+RGBColor trace(Ray ray, vector<Light> lights, OBJParser object, int depth) {
   float distance = -1;
   Vec3 normal(0, 0, 0);
   Vec3 hit_point;
   Face hit_face;
-  for (const Face &face : mesh) {
+
+  for (const Face &face : object.mesh) {
     Hit hit = face.hit(ray);
     if (hit.t > 0 && (distance == -1 || hit.t < distance)) {
       Vec3 new_normal = face.normal_at(hit);
@@ -41,5 +43,5 @@ RGBColor trace(Ray ray, vector<Light> lights, vector<Face> mesh, int depth) {
   Ray reflected_ray = Ray(hit_point + normal * 0.001, reflected_direction);
   return hit_face.get_material().kd * difuse_color +
          hit_face.get_material().ks *
-             trace(reflected_ray, lights, mesh, depth - 1);
+             trace(reflected_ray, lights, object, depth - 1);
 }

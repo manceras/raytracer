@@ -3,11 +3,12 @@
 
 #include "../geometries/face.h"
 #include "../lights/light.h"
+#include "obj_parser.h"
 #include "rgb_color.h"
 #include <vector>
 
 using namespace std;
 
-RGBColor trace(Ray ray, vector<Light> lights, vector<Face> mesh, int depth);
+RGBColor trace(Ray ray, vector<Light> lights, OBJParser object, int depth);
 
 #endif

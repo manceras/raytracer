@@ -4,8 +4,8 @@ look_at = [0, 0.3, 0]
 focal_length = 1
 
 [render]
-width = 1200
-height = 900
+width = 200
+height = 200
 scale = 1
 
 [[lights]]
