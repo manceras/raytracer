@@ -6,7 +6,11 @@ A raytracer built from scratch in C++ as a learning project. No graphics engine,
 
 ## Features
 
+- Monte Carlo path tracing with diffuse and specular bounces
+- Multi-pass accumulation for noise convergence
 - Ray-triangle intersection using the Möller-Trumbore algorithm
+- BVH acceleration structure with AABB intersection
+- Multithreaded rendering (one thread per CPU core)
 - Lambertian (diffuse) shading with inverse square law falloff
 - Smooth shading via vertex normal interpolation
 - Reflections with configurable recursion depth
@@ -16,6 +20,7 @@ A raytracer built from scratch in C++ as a learning project. No graphics engine,
 - Configurable camera with position, look-at and focal length
 - SDL2 graphical output with resolution scaling
 - TOML-based scene configuration
+- Blender export script for scene setup (`export_scene.py`)
 
 ## Dependencies
 
