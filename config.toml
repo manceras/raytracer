@@ -1,24 +1,20 @@
 [camera]
-position = [1, 0.8, 2]
-look_at = [0, 0.3, 0]
-focal_length = 1
+position = [3.9885, 1.9658, 2.5081]
+look_at = [3.1705, 1.7078, 1.9940]
+focal_length = 0.8333
 
 [render]
-width = 1920
-height = 1080
-scale = 1
+width = 200
+height = 200
+scale = 2
 
 [[lights]]
-position = [2, 2, 3]
-color = [20, 18, 15]
+position = [2.4187, 1.9562, 2.6715]
+color = [10.0000, 10.0000, 10.0000]
 
 [[lights]]
-position = [-2, 2, 1]
-color = [6, 8, 16]
-
-[[lights]]
-position = [0, 3, -1]
-color = [8, 6, 12]
+position = [-1.9721, 1.0230, -3.9390]
+color = [10.0000, 10.0000, 10.0000]
 
 [model]
-file = "./3d_files/SuzanneCubedPink.obj"
+file = "./3d_files/Spheres.obj"
