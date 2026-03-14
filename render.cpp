@@ -18,26 +18,30 @@ using namespace std;
 
 void render(int initial_row, int final_row, int width, RGBColor *pixels,
             const Viewport &viewport, const vector<Light> &lights,
-            const BVHNode &bvh) {
-  for (int row = initial_row; row < final_row; row++) {
-    for (int column = 0; column < width; column++) {
-      Ray ray = viewport.rayForPx(column, row);
+            const BVHNode &bvh, int objective_passes) {
 
-      RGBColor color = trace(ray, lights, bvh, 5);
+  for (int _ = 0; _ < objective_passes; _++) {
+    for (int row = initial_row; row < final_row; row++) {
+      for (int column = 0; column < width; column++) {
+        Ray ray = viewport.rayForPx(column, row);
 
-      float final_r = color.red * 255;
-      float final_g = color.green * 255;
-      float final_b = color.blue * 255;
+        RGBColor color = trace(ray, lights, bvh, 3);
 
-      if (final_r > 255)
-        final_r = 255;
-      if (final_g > 255)
-        final_g = 255;
-      if (final_b > 255)
-        final_b = 255;
+        float final_r = color.red * 255;
+        float final_g = color.green * 255;
+        float final_b = color.blue * 255;
 
-      RGBColor final_color(final_r, final_g, final_b);
-      pixels[row * width + column] = final_color;
+        if (final_r > 255)
+          final_r = 255;
+        if (final_g > 255)
+          final_g = 255;
+        if (final_b > 255)
+          final_b = 255;
+
+        RGBColor final_color(final_r, final_g, final_b);
+        pixels[row * width + column] =
+            (final_color + pixels[row * width + column]);
+      }
     }
   }
 }
@@ -88,19 +92,26 @@ int main(int argc, char *argv[]) {
 
   auto start = chrono::high_resolution_clock::now();
 
+  int objective_passes = 30;
+
   for (int group = 0; group < n_cores; group++) {
     int last_row;
     if (group < n_cores - 1)
       last_row = (group + 1) * rows_per_group;
     else
       last_row = height;
-		threads.emplace_back(
-          render, group * rows_per_group, last_row, width, pixels,
-          std::ref(viewport), std::ref(lights), std::ref(bvh));
+    threads.emplace_back(render, group * rows_per_group, last_row, width,
+                         pixels, std::ref(viewport), std::ref(lights),
+                         std::ref(bvh), objective_passes);
   }
 
   for (thread &t : threads)
     t.join();
+
+  for (int i = 0; i < width * height; i++) {
+    RGBColor avarage = pixels[i] * (1.0 / objective_passes);
+		pixels[i] = avarage;
+  }
 
   auto end = chrono::high_resolution_clock::now();
   auto duration = chrono::duration_cast<chrono::milliseconds>(end - start);
